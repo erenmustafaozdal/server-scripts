@@ -1,2 +1,2 @@
-# servers-scripts
+# Server Scripts
 Server bash scripts and aliases
