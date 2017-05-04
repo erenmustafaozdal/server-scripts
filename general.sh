@@ -389,7 +389,7 @@ alias du='du -kh'
 alias df='df -kTh'
 # 11.i quickly source the .bashrc file || remove .bashrc and nano
 alias srcbash='. ~/.bashrc'
-alias rebash='rm ~/.bashrc && nano ~/.bashrc'
+alias rebash='rm -rf ~/.bashrc && nano ~/.bashrc'
 alias runbash='source ~/.bashrc'
 # 11.k update and upgrade system
 alias updateSystem='sudo yum update && sudo yum -y upgrade'
