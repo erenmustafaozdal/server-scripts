@@ -20,6 +20,7 @@
 #       7.c Background Colors
 #       7.d Color Reset
 #       7.e Alert
+#       7.f User specific environment and startup programs
 #   8. Echo bash version, display ip and date
 #   9. exit function
 #   10. Shell Prompt
@@ -53,9 +54,8 @@
 #       12.g Make your directories and files access rights sane
 #   13. Process/system related functions
 #       13.a My personal system information
-#       13.b kill by process name
-#       13.c Get IP adress on ethernet
-#       13.d Get current host related info
+#       13.b Get IP address on ethernet
+#       13.c Get current host related info
 #   14. Misc utilities
 #       14.a Repeat n times command
 #       14.b ask question
@@ -155,6 +155,7 @@ Blue='\e[0;34m'         # Blue
 Purple='\e[0;35m'       # Purple
 Cyan='\e[0;36m'         # Cyan
 White='\e[0;37m'        # White
+Gray='\e[1;30m'         # Gray
 
 # 7.b Soft Colors
 SBlack='\e[1;30m'       # Black
@@ -182,6 +183,10 @@ NC="\e[m"               # Color Reset
 # 7.e Alert
 ALERT=${SWhite}${On_Red} # Bold White on red background
 
+# 7.f User specific environment and startup programs
+PATH=$PATH:$HOME/bin
+export PATH
+
 
 
 # 8. Echo bash version, display ip and date
@@ -192,7 +197,7 @@ date
 # 9. exit function
 function _exit()              # Function to run upon exit of shell.
 {
-    echo -e "${SRed}Good Bye :)${NC}"
+    _echo "Good Bye :)" small SRed;
 }
 trap _exit EXIT
 
@@ -316,13 +321,12 @@ function job_color()
 # 10.h Adds some text in the terminal frame (if applicable)
 # Now we construct the prompt. PROMPT_COMMAND="history -a"
 case ${TERM} in
-  *term | rxvt | linux)
-        PS1="\[\$(load_color)\][\A\[${NC}\] "                   # Time of day (with load info):
-        PS1="\[\$(load_color)\][\A\[${NC}\] "                   # User@Host (with connection type info):
-        PS1=${PS1}"\[${SU}\]\u\[${NC}\]@\[${CNX}\]\h\[${NC}\] " # PWD (with 'disk space' info):
-        PS1=${PS1}"\[\$(disk_color)\]\w]\[${NC}\] "             # Prompt (with 'job' info):
-        PS1=${PS1}"\[\$(job_color)\]>\[${NC}\] "                # Set title of current xterm:
-        PS1=${PS1}"\[\e]0;[\u@\h] \w\a\]"
+    *term | rxvt | linux)
+        PS1="\[\$(disk_color)\][\w]\[${NC}\]\n"                                 # PWD (with 'disk space' info)
+        PS1=${PS1}"${Gray}(\[\$(load_color)\]\A${Gray})\[${NC}\]"               # Time of day (with load info)
+        PS1=${PS1}"${Gray}-(\[${SU}\]\u\[${NC}\]@\[${CNX}\]\h${Gray})\[${NC}\]" # User@Host (with connection type info)
+        PS1=${PS1}"\[\$(job_color)\]->\[${NC}\] "                               # Prompt (with 'job' info)
+        PS1=${PS1}"\[\e]0;(\A)-(\u@\h) -> \w\a"                                 # Set title of current xterm
         ;;
     *)
         PS1="(\A \u@\h \W) > "                                  # --> PS1="(\A \u@\h \w) > "
@@ -363,7 +367,7 @@ alias ...='cd ../..'
 alias ....='cd ../../..'
 alias ....='cd ../../../..'
 # 11.e go to the last directory you were in
-alias back='cd $OLDPWD'
+alias back="cd ${OLDPWD}"
 # 11.f ls aliases
 alias ls='ls -h --color'
 alias ll="ls -lv --group-directories-first"
@@ -385,11 +389,10 @@ alias du='du -kh'
 alias df='df -kTh'
 # 11.i quickly source the .bashrc file || remove .bashrc and nano
 alias srcbash='. ~/.bashrc'
-alias rebash='sudo rm ~/.bashrc && sudo nano ~/.bashrc'
-alias reprofile='sudo rm ~/.bash_profile && sudo nano ~/.bash_profile'
-alias runbash='source ~/.bashrc && source ~/.bash_profile'
+alias rebash='rm ~/.bashrc && nano ~/.bashrc'
+alias runbash='source ~/.bashrc'
 # 11.k update and upgrade system
-alias updateSystem='sudo apt-get update && sudo apt-get -y upgrade'
+alias updateSystem='sudo yum update && sudo yum -y upgrade'
 
 
 
@@ -464,25 +467,7 @@ function sanitize() { chmod -R u=rwX,g=rX,o= "$@" ;}
 function my_ps() { ps $@ -u $USER -o pid,%cpu,%mem,bsdtime,command ; }
 function pp() { my_ps f | awk '!/awk/ && $0~var' var=${1:-".*"} ; }
 
-# 13.b kill by process name
-function killps()
-{
-    local pid pname sig="-TERM"   # default signal
-    if [ "$#" -lt 1 ] || [ "$#" -gt 2 ]; then
-        echo "Usage: killps [-SIGNAL] pattern"
-        return;
-    fi
-    if [ $# = 2 ]; then sig=$1 ; fi
-    for pid in $(my_ps| awk '!/awk/ && $0~pat { print $1 }' pat=${!#} )
-    do
-        pname=$(my_ps | awk '$1~var { print $5 }' var=$pid )
-        if ask "Kill process $pid <$pname> with signal $sig?"
-            then kill $sig $pid
-        fi
-    done
-}
-
-# 13.c Get IP adress on ethernet
+# 13.b Get IP adress on ethernet
 function my_ip()
 {
     MY_IP=$(/sbin/ifconfig eth0 | awk '/inet/ { print $2 } ' |
@@ -490,7 +475,7 @@ function my_ip()
     echo ${MY_IP:-"Not connected"}
 }
 
-# 13.d Get current host related info
+# 13.c Get current host related info
 function ii()
 {
     echo -e "\nYou are logged on ${SRed}$HOST"
@@ -527,7 +512,7 @@ function repeat()
 # 14.b ask question
 function ask()
 {
-    echo -n "$@" '[y/n] ' ; read ans
+    echo -e "$@" '[y/n] ' ; read ans
     case "$ans" in
         y*|Y*) return 0 ;;
         *) return 1 ;;
@@ -581,7 +566,7 @@ function _echo()
         if [ ! -z $3 ]; then
             color=$3;
         fi
-        eval "color=$"$color;
+        eval "color=$"${color};
 
         echo -e "#####\n#"
         echo -e "# ${color}$1${White} - ${Blue}${On_Cyan} ${secondMessage} ${NC}";
@@ -637,10 +622,10 @@ alias gt=GoTo
 function GoToProject()
 {
     local directory="/var/www/projects";
-    if [ ! -z $projectRootDirectory ]; then
-        directory=$projectRootDirectory;
+    if [ ! -z ${projectRootDirectory} ]; then
+        directory=${projectRootDirectory};
     fi
-    gt "$directory/$1";
+    gt "${directory}/$1";
 }
 alias gtp=GoToProject
 
@@ -654,24 +639,24 @@ alias gtsr=goToSiteRoot
 
 # 18.d go to site
 # @param string [site name] [for cPanel]
-function goToSite() {
+function goToSite()
+{
     gt "/home/$1/public_html";
 }
 alias gts=goToSite
 
 # 18.e remove all files in public_html
-# @param string [site name] [for cPanel]
-function removeSitePublicHtml() {
-    gtsr $1
+function removeSitePublicHtml()
+{
     rm -rfv public_html
-    _echo "Removed public html" slant Yellow $1
+    _echo "Removed public html" slant Yellow
 }
 alias rsph=removeSitePublicHtml
 
 # 18.f make public_html directory
 # @param string [site name] [for cPanel]
-function makeSitePublicHtml() {
-    gtsr $1
+function makeSitePublicHtml()
+{
     mkdir public_html
     chown -R $1:nobody public_html
     _echo "Make and chown public html directory" slant Yellow $1

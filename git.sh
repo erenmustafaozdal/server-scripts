@@ -50,12 +50,12 @@ function gitBranch() {
     fi
 
     local types=$(_join " -" "$@");
-    if [[ ! -z $types ]]; then
+    if [[ ! -z ${types} ]]; then
         types="-${types}";
     fi
 
-    git branch $types $branch
-    _echo "$message" small Yellow $branch
+    git branch ${types} ${branch}
+    _echo "${message}" small Yellow ${branch}
 }
 alias gb=gitBranch
 
@@ -66,21 +66,21 @@ function gitCheckout() {
     message="Checkout Branch";
     branches=$1;
     if [ ! -z $2 ]; then
-        branches="$branches $2";
+        branches="${branches} $2";
         message="Checkout New Branch";
         shift;
     fi
     shift;
 
     types=$(_join " -" "$@");
-    if [[ ! -z $types ]]; then
+    if [[ ! -z ${types} ]]; then
         types="-${types}";
     fi
 
-    git checkout $types $branches
+    git checkout ${types} ${branches}
 
     secondMessage=$(_join " - " ${branches})
-    _echo "$message" small Yellow "$secondMessage"
+    _echo "${message}" small Yellow "${secondMessage}"
 }
 alias gcheck=gitCheckout
 
@@ -131,7 +131,7 @@ function gitDeleteBranch() {
         go=$2
     fi
 
-    gcheck $go
+    gcheck ${go}
     gb $1 D
     _echo "Git Branch Delete" slant Yellow "$1"
 }
