@@ -192,6 +192,7 @@ export PATH
 # 8. Echo bash version, display ip and date
 echo -e "${SCyan}This is BASH ${SRed}${BASH_VERSION%.*}${SCyan}\- DISPLAY on ${SRed}$DISPLAY${NC}\n"
 date
+_echo "Hello World!" smscript Blue;
 
 
 # 9. exit function
