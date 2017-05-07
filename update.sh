@@ -19,7 +19,7 @@ function generalScriptsUpdate()
     if [ ! -z ${generalScriptsPath} ]; then
         path=${generalScriptsPath};
     fi
-    cd ${path};
+    cd "${path}";
     gitPull master;
 }
 alias genUpdate=generalScriptsUpdate;
@@ -32,7 +32,7 @@ function generalScriptsPush()
     if [ ! -z ${generalScriptsPath} ]; then
         path=${generalScriptsPath};
     fi
-    cd ${path};
+    cd "${path}";
     gitCommitPush "$1" master;
 }
 alias genPush=generalScriptsPush;

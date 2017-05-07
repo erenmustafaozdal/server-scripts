@@ -14,6 +14,7 @@
 #   4. artisan migrate
 #   5. artisan optimize
 #   6. phpunit test
+#   7. laravel up install on server
 #
 # ============================================================== #
 
