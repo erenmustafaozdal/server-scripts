@@ -15,6 +15,7 @@
 #   5. artisan optimize
 #   6. phpunit test
 #   7. laravel up install on server
+#   8. gulp and laravel modules core vendor publish public tag (MODULES for PRO v1)
 #
 # ============================================================== #
 
@@ -103,6 +104,7 @@ function artisanOptimize()
         php artisan clear-compiled
         type=$1;
     else
+        php artisan cache:clear
         php artisan route:cache
         php artisan config:cache
         php artisan optimize --force
@@ -156,3 +158,16 @@ function laravelInit()
     artisanOptimize
     artisanAppInit up
 }
+
+# 8. gulp and laravel modules core vendor publish public tag (MODULES for PRO v1)
+# @param string [task] (optional)
+function gulpPub() {
+    rm -rf /var/www/projects/ezelnet/packages/erenmustafaozdal/laravel-modules-core/public
+    rm -rf /var/www/projects/ezelnet/public/vendor/laravel-modules-core
+    gtp ezelnet
+    gulp $1
+    _echo "Gulp is finished" small Yellow
+    php artisan vendor:publish --provider="ErenMustafaOzdal\LaravelModulesCore\LaravelModulesCoreServiceProvider" --tag="public" --force
+    _echo "Process completed! :)" slant Yellow
+}
+alias gp=gulpPub
