@@ -170,4 +170,3 @@ function gulpPub() {
     php artisan vendor:publish --provider="ErenMustafaOzdal\LaravelModulesCore\LaravelModulesCoreServiceProvider" --tag="public" --force
     _echo "Process completed! :)" slant Yellow
 }
-alias gp=gulpPub
