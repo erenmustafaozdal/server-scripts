@@ -184,7 +184,7 @@ NC="\e[m"               # Color Reset
 ALERT=${SWhite}${On_Red} # Bold White on red background
 
 # 7.f User specific environment and startup programs
-PATH=$PATH:$HOME/bin
+PATH=$PATH:$HOME/bin:${HOME}/.composer/vendor/bin
 export PATH
 
 
