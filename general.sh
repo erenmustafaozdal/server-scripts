@@ -663,9 +663,21 @@ function makeSitePublicHtml()
 }
 alias msph=makeSitePublicHtml
 
+# 18.g go to package
+# @param string [package name]
+function GoToPackage()
+{
+    local directory="/var/www/projects/packages/packages/erenmustafaozdal";
+    if [ ! -z ${projectRootDirectory} ]; then
+        directory="${projectRootDirectory}/packages/packages/erenmustafaozdal";
+    fi
+    gt "${directory}/$1";
+}
+alias gtpa=GoToPackage
 
 
-_echo "Hello World!" smscript Blue;
+
+_echo "Bismillah" smscript Blue;
 # Local Variables:
 # mode:shell-script
 # sh-shell:bash
