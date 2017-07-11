@@ -8,7 +8,8 @@
 # Last Modified 2017-05-04
 #
 # CODE INDEX
-#   1. ezelnet scripts update
+#   1. general scripts update
+#   2. general scripts push
 #
 # ============================================================== #
 
