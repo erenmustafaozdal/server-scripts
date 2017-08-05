@@ -39,7 +39,7 @@ alias ci=composerInit
 # @param string [linux user]
 function setPermissions()
 {
-    sudo chown -R $1:$1 *
+    sudo chown -R $1:$1 ./
     sudo chmod -R ug+rwx storage bootstrap/cache
     sudo chmod -R 755 public
 

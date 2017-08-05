@@ -26,6 +26,7 @@
 #   16. git commit, merge branch and push two branches
 #   17. git merge branch and push
 #   18. git init
+#   19. git commands for specific packages
 #
 # ============================================================== #
 
@@ -237,3 +238,31 @@ function gitInit() {
     _echo "Git init" slant Yellow "$1"
 }
 alias gi=gitInit
+
+# 19. git commands for specific packages
+function gitCommandsForPackages() {
+    local command=${1}
+    shift;
+
+    local packages=""
+    if [ ! -z $1 ]; then
+        packages=$1
+    fi
+    shift;
+
+    declare params
+    index=0
+    for i in "$@"; do
+        params[${index}]="\"$i\""
+        index=$((index+1))
+    done
+    
+    IFS=',' read -r -a array <<< "${packages}"
+    for i in "${array[@]}"; do
+        gtpa $i
+        eval ${command} ${params[@]}
+    done
+    gtp packages
+    eval ${command} ${params[@]}
+}
+alias gpack=gitCommandsForPackages
