@@ -321,7 +321,7 @@ function job_color()
 # 10.h Adds some text in the terminal frame (if applicable)
 # Now we construct the prompt. PROMPT_COMMAND="history -a"
 case ${TERM} in
-    *term | rxvt | linux)
+    *term | rxvt | linux | cygwin)
         PS1="\[$(disk_color)\][\w]\[${NC}\]\n"                                          # PWD (with 'disk space' info)
         PS1=${PS1}"\[${Gray}\](\[$(load_color)\]\A\[${Gray}\])\[${NC}\]"                # Time of day (with load info)
         PS1=${PS1}"\[${Gray}\]-(\[${SU}\]\u\[${NC}\]@\[${CNX}\]\h\[${Gray}\])\[${NC}\]" # User@Host (with connection type info)
