@@ -324,7 +324,7 @@ case ${TERM} in
     *term | rxvt | linux | cygwin)
         PS1="\[$(disk_color)\][\w]\[${NC}\]\n"                                          # PWD (with 'disk space' info)
         PS1=${PS1}"\[${Gray}\](\[$(load_color)\]\A\[${Gray}\])\[${NC}\]"                # Time of day (with load info)
-        PS1=${PS1}"\[${Gray}\]-(\[${SU}\]\u\[${NC}\]@\[${CNX}\]\h\[${Gray}\])\[${NC}\]" # User@Host (with connection type info)
+        PS1=${PS1}"\[${Gray}\]-(\[${SU}\]\u\[${NC}\]@\[${Green}\]\h\[${Gray}\])\[${NC}\]" # User@Host (with connection type info)
         PS1=${PS1}"\[$(job_color)\]->\[${NC}\] "                                        # Prompt (with 'job' info)
         PS1=${PS1}"\[\e]0;(\A)-(\u@\h) -> \w\a"                                         # Set title of current xterm
         ;;
