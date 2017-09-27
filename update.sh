@@ -16,7 +16,11 @@
 # 1. general scripts update
 function generalScriptsUpdate()
 {
-    local path="/var/www/projects/server-scripts/general-scripts";
+    local directory="/var/www/projects";
+    if [ ! -z ${projectRootDirectory} ]; then
+        directory=${projectRootDirectory};
+    fi
+    local path="${projectRootDirectory}/server-scripts/general-scripts";
     if [ ! -z ${generalScriptsPath} ]; then
         path=${generalScriptsPath};
     fi
@@ -29,7 +33,11 @@ alias genUpdate=generalScriptsUpdate;
 # @param string [commit message]
 function generalScriptsPush()
 {
-    local path="/var/www/projects/server-scripts/general-scripts";
+    local directory="/var/www/projects";
+    if [ ! -z ${projectRootDirectory} ]; then
+        directory=${projectRootDirectory};
+    fi
+    local path="${projectRootDirectory}/server-scripts/general-scripts";
     if [ ! -z ${generalScriptsPath} ]; then
         path=${generalScriptsPath};
     fi
